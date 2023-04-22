@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+    <head>
+      <title>Auditory Crowds</title>
+      <script src="../jspsych-6.3.1/jspsych.js"></script>
+      <script src="../jspsych-6.3.1/plugins/jspsych-html-keyboard-response.js"></script>
+      <script src="../jspsych-6.3.1/plugins/jspsych-categorize-image.js"></script>
+      <script src="../jspsych-6.3.1/plugins/jspsych-image-keyboard-response.js"></script>
+      <script src="../jspsych-6.3.1/plugins/jspsych-same-different-image.js"></script>
+      <script src="../jspsych-6.3.1/plugins/jspsych-fullscreen.js"></script>
+      <script src="../jspsych-6.3.1/plugins/jspsych-preload.js"></script>
+      <script src="../jspsych-6.3.1/plugins/jspsych-image-button-response.js"></script>
+      <script src="../jspsych-6.3.1/plugins/jspsych-instructions.js"></script>
+      <script src="../jspsych-6.3.1/plugins/jspsych-audio-keyboard-response.js"></script>
+      <script src="../jspsych-6.3.1/plugins/jspsych-audio-slider-response.js"></script>
+      <script src="../jspsych-6.0.5/plugins/jspsych-fullscreen.js"></script>
+      <script src="../jspsych-6.3.1/plugins/jspsych-call-function.js"></script>
+      <script src="../jspsych-6.3.1/plugins/jspsych-survey-multi-choice.js"></script>
+      <script src="../jspsych-6.0.5/plugins/jspsych-rdk.js"></script>
+      <script src="../jspsych-6.0.5/plugins/jspsych-html-button-response.js"></script>
+      <script src="../jspsych-6.0.5/plugins/jspsych-fullscreen.js"></script>
+      <script src="audio_paths.js"></script>
+      <link href="../jspsych-6.0.5/css/jspsych.css" rel="stylesheet" type="text/css">
+    </head>
+    <style>    
+    .fixation {font-size: 45px; font-weight: bold; color: rgb(0, 0, 0);}
+    </style>
+    <body></body>
+    <script>
+
+var timeline = []
+var questionOrder = 0 
+var sliderQuestions = 0
+var count = 0;
+var count_magEst = 0;
+var nTrials = 5//faceTrials.length // 100 is for 100 images, 5 for 5 slider questions per an image.
+//https://stackoverflow.com/questions/61408017/play-three-audio-in-sequence-and-collect-response-javascript
+//https://stackoverflow.com/questions/11652197/play-multiple-sound-at-the-same-time
+//https://jspsychophysics.hes.kyushu-u.ac.jp/
+var participantID = jsPsych.data.getURLVariable('ParticipantID');
+console.log('Participant ID is:', participantID);
+if (typeof participantID === "undefined") {
+alert("participant ID is undefined, assigning arbitrarily. ");
+var participantID = 1;
+}
+jsPsych.data.addProperties({participant_ID: participantID});
+
+
+function saveData() {
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', 'write_data.php'); // change 'write_data.php' to point to php script.
+  xhr.setRequestHeader('Content-Type', 'application/json');
+  xhr.onload = function() {
+    if(xhr.status == 200){
+      var response = JSON.parse(xhr.responseText);
+      console.log(response.success);
+    }
+  };
+  //xhr.send(jsPsych.data.get().json());
+  //xhr.send(jsPsych.data.get().json());
+  xhr.send(jsPsych.data.get().last(1).json());
+}
+
+// change the color of the background and the text
+document.body.style.backgroundColor = 'white'//"#808080"
+document.body.style.color = 'black'
+
+var before_audio = {
+  type: 'html-button-response',
+  stimulus: 'Click to start',
+  choices: ['OK']
+}
+
+// AUDIO DESCRIPTIONS AND VARIABLES //
+//var audio = null;
+var snd2  = new Audio();
+var snd2  = new Audio();
+var snd2  = new Audio();
+var snd2  = new Audio();
+var snd2  = new Audio();
+var snd2  = new Audio();
+var snd2  = new Audio();
+var src2  = document.createElement("source");
+
+var test_trial = {
+  type: 'audio-slider-response',
+    stimulus: function(){
+      src2.type = "audio/wav";
+      src2.src  = `Audio_Files/${jsPsych.timelineVariable('X2', true)}/${jsPsych.timelineVariable('X2', true)}${jsPsych.timelineVariable('X8', true)}.wav`;
+      snd2.appendChild(src2);
+      snd2.play(); // Now both will play at the same time
+      //snd1.play(); 
+      return `Audio_Files/${jsPsych.timelineVariable('X1', true)}/${jsPsych.timelineVariable('X1', true)}${jsPsych.timelineVariable('X7', true)}.wav`
+    },
+    labels: ['Not Funny', 'Funny'],
+    prompt: '<p>How funny is the joke?</p>',
+    response_ends_trial: true,
+    on_finish: function(){
+      snd2.pause()
+    }
+};
+
+
+
+
+var snd1  = new Audio();
+var src1  = document.createElement("source");
+src1.type = "audio/wav";
+src1.src  = "Audio_Files/Abigail/Abigail_assignment.wav";
+snd1.appendChild(src1);
+
+
+var trial = {
+  type: 'call-function',
+  func: myfunc
+}
+
+var myfunc = function() {
+    return 'you called?';
+}
+var callingAudio = function(){
+      audio = new Audio();
+      audio.src = "Audio_Files/Alfonso/Alfonso_assignment.wav";
+      audio.play();
+    }
+
+var fixation = {
+    type: 'html-keyboard-response',
+    stimulus: '+',
+    choices: "NO_KEYS",
+    trial_duration: 500,
+    css_classes: ['fixation']
+}
+
+var stop_audio = {
+  type: 'call-function',
+  func: function(){
+    var snd2  = new Audio();
+      var src2  = document.createElement("source");
+      src2.type = "audio/wav";
+      src2.src  = `Audio_Files/${jsPsych.timelineVariable('X2', true)}/${jsPsych.timelineVariable('X2', true)}${jsPsych.timelineVariable('X8', true)}.wav`;
+      snd2.appendChild(src2);
+    snd2.pause();
+  }
+}
+
+const audioTask = {
+    timeline:[test_trial], // curvatureResponseTrial  target_trial
+    timeline_variables: trialList
+}
+
+var fullscreen_trial = {
+  type: 'fullscreen',
+  fullscreen_mode: true
+}
+
+jsPsych.init({
+    timeline: [fullscreen_trial, audioTask, before_audio,  trial], //
+    default_iti: 500,
+    show_progress_bar: true,
+    auto_update_progress_bar: false,
+    message_progress_bar: 'Completion Progress',
+});
+
+
+
+</script>
+</html>
+
+
