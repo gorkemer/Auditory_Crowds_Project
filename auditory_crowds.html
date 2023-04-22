@@ -20,6 +20,7 @@
       <script src="../jspsych-6.0.5/plugins/jspsych-html-button-response.js"></script>
       <script src="../jspsych-6.0.5/plugins/jspsych-fullscreen.js"></script>
       <script src="audio_paths.js"></script>
+      <script src="audio_preloadPaths.js"></script>
       <link href="../jspsych-6.0.5/css/jspsych.css" rel="stylesheet" type="text/css">
     </head>
     <style>    
@@ -41,6 +42,14 @@ var setsize12 = Array(nTrials/3).fill(3)
 var setSizeList = setsize4.concat(setsize4, setsize6, setsize12)
 setSizeList = jsPsych.randomization.repeat(setSizeList, 1) // randomizing the set size condition
 
+var maleList = ["Alfonso", "Alpfonso", "Anthony", "Axel", "Bret", "Bryan", "Carter", "Charles", "Dane", "Dick",
+                "Efren", "Harold", "Harper", "Hudson", "Jarrett", "Larry", "Rodrick", "William"]
+
+var preload = {
+    type: 'preload',
+    auto_preload: true, // automatically load all files based on the main timeline
+    audio: preload_files.map(({ Paths }) => Paths) // to preload manually
+};
 
 //https://stackoverflow.com/questions/61408017/play-three-audio-in-sequence-and-collect-response-javascript
 //https://stackoverflow.com/questions/11652197/play-multiple-sound-at-the-same-time
@@ -153,6 +162,11 @@ function playSounds(){
 
 var test_trial = {
   type: 'audio-slider-response',
+    min: 1,
+    max: 10,
+    slider_start: function(){
+      return Math.floor(Math.random() * 10) + 1;
+    },
     stimulus: function(){
       determineSetSize = setSizeList[jsPsych.timelineVariable('', true)]//for the trial
       console.log("running trial ", jsPsych.timelineVariable('', true))
@@ -236,9 +250,35 @@ var test_trial = {
       return `Audio_Files/${jsPsych.timelineVariable('id_1', true)}/${jsPsych.timelineVariable('id_1', true)}${jsPsych.timelineVariable('type_1', true)}.wav`
     },
     labels: ['Almost all female', 'Almost all male'],
-    prompt: '<p>How male-populated this crowd is?</p>',
+    prompt: '<p>Please estimate the male to female ratio.</p>',
     response_ends_trial: true,
-    on_finish: function(){
+    on_finish: function(data){
+
+      data.id_1 = jsPsych.timelineVariable('id_1')
+      data.id_2 = jsPsych.timelineVariable('id_2')
+      data.id_3 = jsPsych.timelineVariable('id_3')
+      data.id_4 = jsPsych.timelineVariable('id_4')
+      data.id_5 = jsPsych.timelineVariable('id_5')
+      data.id_6 = jsPsych.timelineVariable('id_6')
+      data.id_7 = jsPsych.timelineVariable('id_7')
+      data.id_8 = jsPsych.timelineVariable('id_8')
+      data.id_9 = jsPsych.timelineVariable('id_9')
+      data.id_10 = jsPsych.timelineVariable('id_10')
+      data.id_11 = jsPsych.timelineVariable('id_11')
+      data.id_12 = jsPsych.timelineVariable('id_12')
+      // types below
+      data.type_1 = jsPsych.timelineVariable('type_1')
+      data.type_2 = jsPsych.timelineVariable('type_2')
+      data.type_3 = jsPsych.timelineVariable('type_3')
+      data.type_4 = jsPsych.timelineVariable('type_4')
+      data.type_5 = jsPsych.timelineVariable('type_5')
+      data.type_6 = jsPsych.timelineVariable('type_6')
+      data.type_7 = jsPsych.timelineVariable('type_7')
+      data.type_8 = jsPsych.timelineVariable('type_8')
+      data.type_9 = jsPsych.timelineVariable('type_9')
+      data.type_10 = jsPsych.timelineVariable('type_10')
+      data.type_11 = jsPsych.timelineVariable('type_11')
+      data.type_12 = jsPsych.timelineVariable('type_12')
       snd2.pause()
       snd3.pause()
       snd4.pause()
@@ -250,6 +290,14 @@ var test_trial = {
       snd10.pause()
       snd11.pause()
       snd12.pause()
+/* 
+    if ('make' in maleList === false) {
+      car.make = 'Suzuki';
+    }
+ */
+      data.setSize = setSizeList[jsPsych.timelineVariable('', true)]
+
+      saveData()
     }
 };
 
@@ -309,7 +357,7 @@ var fullscreen_trial = {
 }
 
 jsPsych.init({
-    timeline: [fullscreen_trial, audioTask, before_audio,  trial], //
+    timeline: [preload, fullscreen_trial, audioTask, before_audio,  trial], //
     default_iti: 500,
     show_progress_bar: true,
     auto_update_progress_bar: false,
