@@ -14,38 +14,38 @@ df = read.csv('names.csv', header = TRUE) #('ImageDB/imageDB_5-2-2022.csv', head
 names <- df$Names
 types <- df$types[!(df$types == "")]
 types
-nTrials = 20
+nTrials = 120
 #create data frame with nTrials rows and 2 columns
 trial_df <- data.frame(matrix(ncol = 2, nrow = nTrials))
 #provide column names
 colnames(trial_df) <- c('Names', 'Types')
-setSize <- 6
-trial_matrix <- matrix(ncol = 12, nrow = nTrials)
+setSize <- 12
+trial_matrix <- matrix(ncol = setSize*2, nrow = nTrials)
 for (i in 1:nTrials){
   print(i)
   print(sample(names, setSize, replace=FALSE)) # picking random 6 items from a list of 28
   print(sample(types, setSize, replace=FALSE))
-  trial_matrix[i,1:6] <- c(sample(names, 6, replace=FALSE))
-  trial_matrix[i,7:12] <- c(sample(types, 6, replace=FALSE)) # here I create the content columns which has the same set size of the setSize
+  trial_matrix[i,1:12] <- c(sample(names, setSize, replace=FALSE))
+  trial_matrix[i,13:24] <- c(sample(types, setSize, replace=FALSE)) # here I create the content columns which has the same set size of the setSize
 }
 # this is for set size 6 
-trial_df_set6 <- data.frame(trial_matrix)
+trial_df_set12 <- data.frame(trial_matrix)
 # renaming
-colnames(trial_df_set6)
+colnames(trial_df_set12)
 number_of_identities <- length(names)
 colnames_ids <- c()
 colnames_types <- c()
 for (i in 1:setSize){
-  id_names <- paste("id",i, sep = "-")
+  id_names <- paste("id",i, sep = "_")
   colnames_ids <- append(colnames_ids, id_names)
-  types <- paste("type",i, sep = "-")
+  types <- paste("type",i, sep = "_")
   colnames_types <- append(colnames_types, types)
 }
 colnames_ids
 colnames_types
-colnames(trial_df_set6) <- c(colnames_ids,colnames_types)
-colnames(trial_df_set6)
-write.csv(trial_df_set6, file = 'trial_df_set6.csv')
+colnames(trial_df_set12) <- c(colnames_ids,colnames_types)
+colnames(trial_df_set12)
+write.csv(trial_df_set12, file = 'trial_df_set12.csv')
   
   
   

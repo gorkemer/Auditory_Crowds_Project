@@ -33,7 +33,15 @@ var questionOrder = 0
 var sliderQuestions = 0
 var count = 0;
 var count_magEst = 0;
-var nTrials = 5//faceTrials.length // 100 is for 100 images, 5 for 5 slider questions per an image.
+var nTrials = 21//faceTrials.length // 100 is for 100 images, 5 for 5 slider questions per an image.
+// stimSet condition list
+var setsize4 = Array(nTrials/3).fill(1)
+var setsize6 = Array(nTrials/3).fill(2)
+var setsize12 = Array(nTrials/3).fill(3)
+var setSizeList = setsize4.concat(setsize4, setsize6, setsize12)
+setSizeList = jsPsych.randomization.repeat(setSizeList, 1) // randomizing the set size condition
+
+
 //https://stackoverflow.com/questions/61408017/play-three-audio-in-sequence-and-collect-response-javascript
 //https://stackoverflow.com/questions/11652197/play-multiple-sound-at-the-same-time
 //https://jspsychophysics.hes.kyushu-u.ac.jp/
@@ -44,6 +52,7 @@ alert("participant ID is undefined, assigning arbitrarily. ");
 var participantID = 1;
 }
 jsPsych.data.addProperties({participant_ID: participantID});
+
 
 
 function saveData() {
@@ -71,35 +80,180 @@ var before_audio = {
   choices: ['OK']
 }
 
-// AUDIO DESCRIPTIONS AND VARIABLES //
-//var audio = null;
-var snd2  = new Audio();
-var snd2  = new Audio();
-var snd2  = new Audio();
-var snd2  = new Audio();
-var snd2  = new Audio();
-var snd2  = new Audio();
+var audio = null;
 var snd2  = new Audio();
 var src2  = document.createElement("source");
+var snd3  = new Audio();
+var src3  = document.createElement("source");
+var snd4  = new Audio();
+var src4  = document.createElement("source");
+var snd5  = new Audio();
+var src5  = document.createElement("source");
+var snd6  = new Audio();
+var src6  = document.createElement("source");
+var snd7  = new Audio();
+var src7  = document.createElement("source");
+var snd8  = new Audio();
+var src8  = document.createElement("source");
+var snd9  = new Audio();
+var src9  = document.createElement("source");
+var snd10  = new Audio();
+var src10  = document.createElement("source");
+var snd11  = new Audio();
+var src11  = document.createElement("source");
+var snd12  = new Audio();
+var src12  = document.createElement("source");
+
+src2.type = "audio/wav";
+src3.type = "audio/wav";
+src4.type = "audio/wav";
+src5.type = "audio/wav";
+src6.type = "audio/wav";
+src7.type = "audio/wav";
+src8.type = "audio/wav";
+src9.type = "audio/wav";
+src10.type = "audio/wav";
+src11.type = "audio/wav";
+src12.type = "audio/wav";
+
+
+
+
+function playSounds(){
+
+  // what is the setSize
+  src2.type = "audio/wav";
+      src2.src  = `Audio_Files/${jsPsych.timelineVariable('id_2', true)}/${jsPsych.timelineVariable('id_2', true)}${jsPsych.timelineVariable('type_2', true)}.wav`;
+      snd2.appendChild(src2);
+      snd2.play(); // Now both will play at the same time
+      //snd1.play(); 
+      // 3
+      src3.type = "audio/wav";
+      src3.src  = `Audio_Files/${jsPsych.timelineVariable('id_3', true)}/${jsPsych.timelineVariable('id_3', true)}${jsPsych.timelineVariable('type_3', true)}.wav`;
+      snd3.appendChild(src3);
+      snd3.play()
+      // 4
+      src4.type = "audio/wav";
+      src4.src  = `Audio_Files/${jsPsych.timelineVariable('id_4', true)}/${jsPsych.timelineVariable('id_4', true)}${jsPsych.timelineVariable('type_4', true)}.wav`;
+      snd4.appendChild(src4);
+      snd4.play()
+      //5
+      src5.type = "audio/wav";
+      src5.src  = `Audio_Files/${jsPsych.timelineVariable('id_5', true)}/${jsPsych.timelineVariable('id_5', true)}${jsPsych.timelineVariable('type_5', true)}.wav`;
+      snd5.appendChild(src5);
+      snd5.play()
+      // 6
+      src6.type = "audio/wav";
+      src6.src  = `Audio_Files/${jsPsych.timelineVariable('id_6', true)}/${jsPsych.timelineVariable('id_6', true)}${jsPsych.timelineVariable('type_6', true)}.wav`;
+      snd6.appendChild(src6);
+      snd6.play()
+      return `Audio_Files/${jsPsych.timelineVariable('id_1', true)}/${jsPsych.timelineVariable('id_1', true)}${jsPsych.timelineVariable('type_1', true)}.wav`
+}
+
 
 var test_trial = {
   type: 'audio-slider-response',
     stimulus: function(){
-      src2.type = "audio/wav";
-      src2.src  = `Audio_Files/${jsPsych.timelineVariable('X2', true)}/${jsPsych.timelineVariable('X2', true)}${jsPsych.timelineVariable('X8', true)}.wav`;
-      snd2.appendChild(src2);
-      snd2.play(); // Now both will play at the same time
-      //snd1.play(); 
-      return `Audio_Files/${jsPsych.timelineVariable('X1', true)}/${jsPsych.timelineVariable('X1', true)}${jsPsych.timelineVariable('X7', true)}.wav`
+      determineSetSize = setSizeList[jsPsych.timelineVariable('', true)]//for the trial
+      console.log("running trial ", jsPsych.timelineVariable('', true))
+      console.log("setSize is", determineSetSize)
+      if (determineSetSize == 1) { // 1 = setSize6
+          src2.src  = `Audio_Files/${jsPsych.timelineVariable('id_2', true)}/${jsPsych.timelineVariable('id_2', true)}${jsPsych.timelineVariable('type_2', true)}.wav`;
+        src3.src  = `Audio_Files/${jsPsych.timelineVariable('id_3', true)}/${jsPsych.timelineVariable('id_3', true)}${jsPsych.timelineVariable('type_3', true)}.wav`;
+        src4.src  = `Audio_Files/${jsPsych.timelineVariable('id_4', true)}/${jsPsych.timelineVariable('id_4', true)}${jsPsych.timelineVariable('type_4', true)}.wav`;
+        src5.src  = `Audio_Files/${jsPsych.timelineVariable('id_5', true)}/${jsPsych.timelineVariable('id_5', true)}${jsPsych.timelineVariable('type_5', true)}.wav`;
+        src6.src  = `Audio_Files/${jsPsych.timelineVariable('id_6', true)}/${jsPsych.timelineVariable('id_6', true)}${jsPsych.timelineVariable('type_6', true)}.wav`;
+        snd2.appendChild(src2);
+        snd3.appendChild(src3);
+        snd4.appendChild(src4);
+        snd5.appendChild(src5);
+        snd6.appendChild(src6);
+        snd2.play(); // Now both will play at the same time
+        snd3.play()
+        snd4.play()
+        snd5.play()
+        snd6.play()
+      }
+      else if (determineSetSize == 2) { // 2 = setSize8
+        src2.src  = `Audio_Files/${jsPsych.timelineVariable('id_2', true)}/${jsPsych.timelineVariable('id_2', true)}${jsPsych.timelineVariable('type_2', true)}.wav`;
+        src3.src  = `Audio_Files/${jsPsych.timelineVariable('id_3', true)}/${jsPsych.timelineVariable('id_3', true)}${jsPsych.timelineVariable('type_3', true)}.wav`;
+        src4.src  = `Audio_Files/${jsPsych.timelineVariable('id_4', true)}/${jsPsych.timelineVariable('id_4', true)}${jsPsych.timelineVariable('type_4', true)}.wav`;
+        src5.src  = `Audio_Files/${jsPsych.timelineVariable('id_5', true)}/${jsPsych.timelineVariable('id_5', true)}${jsPsych.timelineVariable('type_5', true)}.wav`;
+        src6.src  = `Audio_Files/${jsPsych.timelineVariable('id_6', true)}/${jsPsych.timelineVariable('id_6', true)}${jsPsych.timelineVariable('type_6', true)}.wav`;
+        snd2.appendChild(src2);
+        snd3.appendChild(src3);
+        snd4.appendChild(src4);
+        snd5.appendChild(src5);
+        snd6.appendChild(src6);
+        snd2.play(); // Now both will play at the same time
+        snd3.play()
+        snd4.play()
+        snd5.play()
+        snd6.play()
+        src7.src  = `Audio_Files/${jsPsych.timelineVariable('id_7', true)}/${jsPsych.timelineVariable('id_7', true)}${jsPsych.timelineVariable('type_7', true)}.wav`;
+        src8.src  = `Audio_Files/${jsPsych.timelineVariable('id_8', true)}/${jsPsych.timelineVariable('id_8', true)}${jsPsych.timelineVariable('type_8', true)}.wav`;
+        snd7.appendChild(src7);
+        snd8.appendChild(src8);
+        snd7.play()
+        snd8.play()
+      }
+      else if (determineSetSize == 3) { // 2 = setSize8
+        src2.src  = `Audio_Files/${jsPsych.timelineVariable('id_2', true)}/${jsPsych.timelineVariable('id_2', true)}${jsPsych.timelineVariable('type_2', true)}.wav`;
+        src3.src  = `Audio_Files/${jsPsych.timelineVariable('id_3', true)}/${jsPsych.timelineVariable('id_3', true)}${jsPsych.timelineVariable('type_3', true)}.wav`;
+        src4.src  = `Audio_Files/${jsPsych.timelineVariable('id_4', true)}/${jsPsych.timelineVariable('id_4', true)}${jsPsych.timelineVariable('type_4', true)}.wav`;
+        src5.src  = `Audio_Files/${jsPsych.timelineVariable('id_5', true)}/${jsPsych.timelineVariable('id_5', true)}${jsPsych.timelineVariable('type_5', true)}.wav`;
+        src6.src  = `Audio_Files/${jsPsych.timelineVariable('id_6', true)}/${jsPsych.timelineVariable('id_6', true)}${jsPsych.timelineVariable('type_6', true)}.wav`;
+        snd2.appendChild(src2);
+        snd3.appendChild(src3);
+        snd4.appendChild(src4);
+        snd5.appendChild(src5);
+        snd6.appendChild(src6);
+        snd2.play(); // Now both will play at the same time
+        snd3.play()
+        snd4.play()
+        snd5.play()
+        snd6.play()
+        src7.src  = `Audio_Files/${jsPsych.timelineVariable('id_7', true)}/${jsPsych.timelineVariable('id_7', true)}${jsPsych.timelineVariable('type_7', true)}.wav`;
+        src8.src  = `Audio_Files/${jsPsych.timelineVariable('id_8', true)}/${jsPsych.timelineVariable('id_8', true)}${jsPsych.timelineVariable('type_8', true)}.wav`;
+        snd7.appendChild(src7);
+        snd8.appendChild(src8);
+        snd7.play()
+        snd8.play()
+        src9.src  = `Audio_Files/${jsPsych.timelineVariable('id_9', true)}/${jsPsych.timelineVariable('id_9', true)}${jsPsych.timelineVariable('type_9', true)}.wav`;
+        src10.src  = `Audio_Files/${jsPsych.timelineVariable('id_10', true)}/${jsPsych.timelineVariable('id_10', true)}${jsPsych.timelineVariable('type_10', true)}.wav`;
+        src11.src  = `Audio_Files/${jsPsych.timelineVariable('id_11', true)}/${jsPsych.timelineVariable('id_11', true)}${jsPsych.timelineVariable('type_11', true)}.wav`;
+        src12.src  = `Audio_Files/${jsPsych.timelineVariable('id_12', true)}/${jsPsych.timelineVariable('id_12', true)}${jsPsych.timelineVariable('type_12', true)}.wav`;
+        snd9.appendChild(src9);
+        snd10.appendChild(src10);
+        snd11.appendChild(src11);
+        snd12.appendChild(src12);
+        snd9.play()
+        snd10.play()
+        snd11.play()
+        snd12.play()
+      }
+
+      return `Audio_Files/${jsPsych.timelineVariable('id_1', true)}/${jsPsych.timelineVariable('id_1', true)}${jsPsych.timelineVariable('type_1', true)}.wav`
     },
-    labels: ['Not Funny', 'Funny'],
-    prompt: '<p>How funny is the joke?</p>',
+    labels: ['Almost all female', 'Almost all male'],
+    prompt: '<p>How male-populated this crowd is?</p>',
     response_ends_trial: true,
     on_finish: function(){
       snd2.pause()
+      snd3.pause()
+      snd4.pause()
+      snd5.pause()
+      snd6.pause()
+      snd7.pause()
+      snd8.pause()
+      snd9.pause()
+      snd10.pause()
+      snd11.pause()
+      snd12.pause()
     }
 };
 
+// YESSS WORKS!  ALMOOST THERE
 
 
 
